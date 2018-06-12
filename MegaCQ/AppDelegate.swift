@@ -50,7 +50,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             print("Background Time Remaining = Undetermined")
         }else{
             BackgroundSeconds += 1
-            print("Background Time Remaining = " + "\(BackgroundSeconds) Secunds")
         }
     }
 

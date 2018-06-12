@@ -251,7 +251,7 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-        if SolicitarBtn.isHidden == false {
+        if SolicitarBtn.isHidden == false{
             self.miposicion.title = "origen"
             self.coreLocationManager.stopUpdatingLocation()
             self.mapaVista.removeAnnotations(self.mapaVista.annotations)
@@ -262,7 +262,7 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         origenIcono.isHidden = true
-        if SolicitarBtn.isHidden == false {
+        if SolicitarBtn.isHidden == false{
             miposicion.coordinate = (self.mapaVista.centerCoordinate)
             origenAnotacion.title = "origen"
             mapaVista.addAnnotation(self.miposicion)
@@ -316,7 +316,7 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
             let alertaVersion = UIAlertController (title: "Versión de la aplicación", message: "Estimado cliente es necesario que actualice a la última versión de la aplicación disponible en la AppStore. ¿Desea hacerlo en este momento?", preferredStyle: .alert)
             alertaVersion.addAction(UIAlertAction(title: "Si", style: .default, handler: {alerAction in
                 
-                UIApplication.shared.openURL(URL(string: "itms-apps://itunes.apple.com/us/app/apple-store/id1149206387?mt=8")!)
+                UIApplication.shared.openURL(URL(string: "itms-apps://itunes.apple.com/us/app/apple-store/id1393860445?mt=8")!)
             }))
             alertaVersion.addAction(UIAlertAction(title: "No", style: .default, handler: {alerAction in
                 exit(0)
@@ -452,16 +452,21 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
                     let solicitud = myvariables.solpendientes[i]
                     solicitud.DatosTaxiConductor(idtaxi: temporal[6], matricula: temporal[8], codigovehiculo: temporal[7], marcaVehiculo: temporal[9],colorVehiculo: temporal[10], lattaxi: temporal[11], lngtaxi: temporal[12], idconductor: temporal[2], nombreapellidosconductor: temporal[3], movilconductor: temporal[4], foto: temporal[5])
                     
-                    let alertaDos = UIAlertController (title: "Solicitud Aceptada", message: "Su vehículo se encuentra en camino, siga su trayectoria en el mapa y/o comuníquese con el conductor.", preferredStyle: .alert)
+                    let vc = UIStoryboard(name:"Main", bundle:nil).instantiateViewController(withIdentifier: "SolPendientes") as! SolPendController
+                    vc.SolicitudPendiente = solicitud
+                    vc.posicionSolicitud = myvariables.solpendientes.count - 1
+                    self.navigationController?.show(vc, sender: nil)
+                    
+                    /*let alertaDos = UIAlertController (title: "Solicitud Aceptada", message: "Su vehículo se encuentra en camino, siga su trayectoria en el mapa y/o comuníquese con el conductor.", preferredStyle: .alert)
                     alertaDos.addAction(UIAlertAction(title: "Aceptar", style: .default, handler: {alerAction in
+                     let vc = UIStoryboard(name:"Main", bundle:nil).instantiateViewController(withIdentifier: "SolPendientes") as! SolPendController
+                     vc.SolicitudPendiente = solicitud
+                     vc.posicionSolicitud = myvariables.solpendientes.count - 1
+                     self.navigationController?.show(vc, sender: nil)
                         
-                        let vc = UIStoryboard(name:"Main", bundle:nil).instantiateViewController(withIdentifier: "SolPendientes") as! SolPendController
-                        vc.SolicitudPendiente = solicitud
-                        vc.posicionSolicitud = myvariables.solpendientes.count - 1
-                        self.navigationController?.show(vc, sender: nil)
                     }))
                     
-                    self.present(alertaDos, animated: true, completion: nil)
+                    self.present(alertaDos, animated: true, completion: nil)*/
                 }
             }
             else{
@@ -551,15 +556,12 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
                     myvariables.SMSVoz.ReproducirVozConductor(myvariables.urlconductor)
                 }
             }else{
-                if myvariables.SMSProceso{
-                    myvariables.SMSVoz.ReproducirMusica()
-                    myvariables.SMSVoz.ReproducirVozConductor(myvariables.urlconductor)
-                }else{
-                    print("Esta en background")
-                }
+                myvariables.SMSVoz.ReproducirMusica()
+                myvariables.SMSVoz.ReproducirVozConductor(myvariables.urlconductor)
+
                 let localNotification = UILocalNotification()
                 localNotification.alertAction = "Mensaje del Conductor"
-                localNotification.alertBody = "Mensaje del Conductor. Abra la aplicación para escucharlo."
+                localNotification.alertBody = "Mensaje del Conductor. Abra la aplicación para volver a escucharlo."
                 localNotification.fireDate = Date(timeIntervalSinceNow: 4)
                 UIApplication.shared.scheduleLocalNotification(localNotification)
             }
@@ -857,6 +859,7 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
         let Datos = "#Solicitud" + "," + datoscliente + "," + datossolicitud + "," + String(nuevaSolicitud.origenCarrera.latitude) + "," + String(nuevaSolicitud.origenCarrera.longitude) + "," + "0.0" + "," + "0.0" + "," + datosgeo + "," + voucher + ",# \n"
         //EnviarSocket(Datos)
         self.EnviarTimer(estado: 1, datos: Datos)
+        print("Datos Solicitud \(Datos                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )")
         MensajeEspera.text = "Procesando..."
         self.AlertaEsperaView.isHidden = false
         self.origenText.text?.removeAll()
@@ -1012,7 +1015,6 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
                     animateViewMoving(true, moveValue: 100, view: self.view)
                     let alertaDos = UIAlertController (title: "Dirección de Origen", message: "La dirección de recogida es un campo requerido", preferredStyle: .alert)
                     alertaDos.addAction(UIAlertAction(title: "Aceptar", style: .default, handler: {alerAction in
-                        //self.origenText.becomeFirstResponder()
                     }))
                     
                     self.present(alertaDos, animated: true, completion: nil)
@@ -1046,8 +1048,9 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
         
         if self.DireccionesArray.count < 5 {
             self.RecordarView.isHidden = false
+            //NSLayoutConstraint(item: self.RecordarView, attribute: .bottom, relatedBy: .equal, toItem: self.referenciaText, attribute:.top, multiplier: 1.0, constant:-5.0).isActive = true
+            NSLayoutConstraint(item: self.origenText, attribute: .bottom, relatedBy: .equal, toItem: self.RecordarView, attribute:.top, multiplier: 1.0, constant:-5.0).isActive = true
         }
-        
         self.EnviarSolBtn.isEnabled = true
     }
     
@@ -1164,7 +1167,7 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
                 let vc = UIStoryboard(name:"Main", bundle:nil).instantiateViewController(withIdentifier: "Perfil") as! PerfilController
                 self.navigationController?.show(vc, sender: nil)
             case "Compartir app"?:
-                if let name = URL(string: "itms://itunes.apple.com/us/app/apple-store/id1149206387?mt=8") {
+                if let name = URL(string: "itms://itunes.apple.com/us/app/apple-store/id1393860445?mt=8") {
                     let objectsToShare = [name]
                     let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
                     
@@ -1220,9 +1223,7 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
         self.MenuView1.isHidden = !self.MenuView1.isHidden
         self.MenuView1.startCanvasAnimation()
         self.TransparenciaView.isHidden = self.MenuView1.isHidden
-        self.Inicio()
         self.TransparenciaView.startCanvasAnimation()
-        
     }
     @IBAction func SalirApp(_ sender: Any) {
         let fileAudio = FileManager()
@@ -1252,7 +1253,7 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
          NSLayoutConstraint(item: myView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailingMargin, multiplier: 1.0, constant: 0.0).isActive = true
          
          NSLayoutConstraint(item: myView, attribute: .height, relatedBy: .equal, toItem: myView, attribute:.width, multiplier: 2.0, constant:0.0).isActive = true?*/
-        
+
         self.CargarFavoritas()
         self.TablaDirecciones.reloadData()
         self.origenIcono.isHidden = true
@@ -1266,11 +1267,8 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
             self.VoucherView.isHidden = false
             self.VoucherEmpresaName.text = myvariables.cliente.empresa
             NSLayoutConstraint(item: self.BtnsView, attribute: .top, relatedBy: .equal, toItem: self.VoucherView, attribute:.bottom, multiplier: 1.0, constant:15.0).isActive = true
-            NSLayoutConstraint(item: self.BtnsView, attribute:.height, relatedBy: .equal, toItem: self.origenText, attribute:.height, multiplier: 1.0, constant:5.0).isActive = true
         }else{
             NSLayoutConstraint(item: self.BtnsView, attribute: .top, relatedBy: .equal, toItem: self.ContactoView, attribute:.bottom, multiplier: 1.0, constant:0.0).isActive = true
-            
-            NSLayoutConstraint(item: self.BtnsView, attribute:.height, relatedBy: .equal, toItem: self.origenText, attribute:.height, multiplier: 1.0, constant:5.0).isActive = true
         }
     }
     
@@ -1325,7 +1323,7 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
                 }
                 self.CrearSolicitud(nuevaSolicitud,voucher: voucher)
                 self.RecordarView.isHidden = true
-                //self.CancelarSolicitudProceso.isHidden = false
+
             }else{
                 
             }
@@ -1334,7 +1332,6 @@ class InicioController: UIViewController, CLLocationManagerDelegate, UITextViewD
     
     //Boton para Cancelar Carrera
     @IBAction func CancelarSol(_ sender: UIButton) {
-        print("Cancelando con taxi")
         self.formularioSolicitud.isHidden = true
         self.referenciaText.endEditing(true)
         self.Inicio()

@@ -58,12 +58,13 @@ class LoginController: UIViewController, UITextFieldDelegate, CLLocationManagerD
         coreLocationManager.delegate = self
         coreLocationManager.requestWhenInUseAuthorization()
         
-        telefonoText.delegate = self
-        claveText.delegate = self
-        correoText.delegate = self
+        self.Usuario.delegate = self
+        self.telefonoText.delegate = self
+        self.claveText.delegate = self
+        self.correoText.delegate = self
         self.movilClaveRecover.delegate = self
-        confirmarClavText.delegate = self
-        Clave.delegate = self
+        self.confirmarClavText.delegate = self
+        self.Clave.delegate = self
         self.RecomendadoText.delegate = self
         
         
@@ -75,7 +76,7 @@ class LoginController: UIViewController, UITextFieldDelegate, CLLocationManagerD
         self.view.addGestureRecognizer(tapGesture)
         
         if CConexionInternet.isConnectedToNetwork() == true{
-            myvariables.socket = SocketIOClient(socketURL: URL(string: "http://173.249.14.230:6026")!, config: [.log(false), .forcePolling(true)])
+            myvariables.socket = SocketIOClient(socketURL: URL(string: "http://173.249.14.230:6037")!, config: [.log(false), .forcePolling(true)])
             myvariables.socket.connect()
                 
             myvariables.socket.on("connect"){data, ack in
@@ -385,8 +386,8 @@ class LoginController: UIViewController, UITextFieldDelegate, CLLocationManagerD
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.textColor = UIColor.black
         textField.text?.removeAll()
-            if textField.isEqual(claveText) || textField.isEqual(Clave){
-                animateViewMoving(true, moveValue: 80, view: self.view)
+            if textField.isEqual(claveText) || textField.isEqual(Clave) || textField.isEqual(self.Usuario){
+                animateViewMoving(true, moveValue: 100, view: self.view)
             }
             else{
                 if textField.isEqual(movilClaveRecover){
@@ -409,8 +410,8 @@ class LoginController: UIViewController, UITextFieldDelegate, CLLocationManagerD
     }
     func textFieldDidEndEditing(_ textfield: UITextField) {
         textfield.text = textfield.text!.replacingOccurrences(of: ",", with: ".")
-            if textfield.isEqual(claveText) || textfield.isEqual(Clave){
-                    animateViewMoving(false, moveValue: 80, view: self.view)
+            if textfield.isEqual(claveText) || textfield.isEqual(Clave) || textfield.isEqual(self.Usuario){
+                    animateViewMoving(false, moveValue: 100, view: self.view)
             }else{
                 if textfield.isEqual(confirmarClavText) || textfield.isEqual(correoText) || textfield.isEqual(RecomendadoText){
                     if textfield.text != claveText.text && textfield.isEqual(confirmarClavText){

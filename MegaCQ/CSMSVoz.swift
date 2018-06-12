@@ -24,7 +24,7 @@ class CSMSVoz: UIViewController, URLSessionDelegate, URLSessionTaskDelegate, URL
     var responseData = NSMutableData()
     var data: Data!
     var reproduciendo = false
-
+    
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -55,15 +55,15 @@ class CSMSVoz: UIViewController, URLSessionDelegate, URLSessionTaskDelegate, URL
                     try! self.recordingSession.setActive(true)
                     
                     let recordSettings = [AVSampleRateKey : NSNumber(value: Float(8000.0) as Float),
-                        AVFormatIDKey : NSNumber(value: Int32(kAudioFormatMPEG4AAC) as Int32),
-                        AVNumberOfChannelsKey : NSNumber(value: 1 as Int32),
-                        AVEncoderAudioQualityKey : NSNumber(value: Int32(AVAudioQuality.low.rawValue) as Int32)]
+                                          AVFormatIDKey : NSNumber(value: Int32(kAudioFormatMPEG4AAC) as Int32),
+                                          AVNumberOfChannelsKey : NSNumber(value: 1 as Int32),
+                                          AVEncoderAudioQualityKey : NSNumber(value: Int32(AVAudioQuality.low.rawValue) as Int32)]
                     
                     let audioSession = AVAudioSession.sharedInstance()
                     do {
                         try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord, with: .defaultToSpeaker)
                         try self.audioRecorder = AVAudioRecorder(url: self.directoryURL()!,
-                            settings: recordSettings)
+                                                                 settings: recordSettings)
                         self.audioRecorder.prepareToRecord()
                     } catch {
                         
@@ -76,11 +76,11 @@ class CSMSVoz: UIViewController, URLSessionDelegate, URLSessionTaskDelegate, URL
         }
         
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
- 
+    
     // get the path of our file
     
     func directoryURL() -> URL? {
@@ -93,7 +93,7 @@ class CSMSVoz: UIViewController, URLSessionDelegate, URLSessionTaskDelegate, URL
         //let soundURL = NSURL.fileURLWithPath(urls as String)
         return soundURL
     }
-
+    
     //para reproducir audio de internet
     func PlayForInternet(_ url: String){
         let url = url
@@ -122,7 +122,7 @@ class CSMSVoz: UIViewController, URLSessionDelegate, URLSessionTaskDelegate, URL
             let filePath = NSHomeDirectory() + "/Library/Caches/Audio" + name
             let audio = try? Data(contentsOf: directoryURL()!)
             try? audio?.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
-           
+            
         } catch {
         }
     }
@@ -138,7 +138,7 @@ class CSMSVoz: UIViewController, URLSessionDelegate, URLSessionTaskDelegate, URL
         }
     }
     
-
+    
     func ReproducirVozConductor(_ url: String){
         //AUDIOSESSION
         let playerItem = AVPlayerItem(url: URL(string: url)!)
@@ -174,7 +174,7 @@ class CSMSVoz: UIViewController, URLSessionDelegate, URLSessionTaskDelegate, URL
         
         let filename = recordedFilePath ?? currentFilename
         let header = "Content-Disposition: form-data; name=\"uploadedfile\"; filename=\"\(currentFilename)\"\r\n"
-
+        
         let request = NSMutableURLRequest()
         request.url = sendToURL
         request.httpMethod = "POST"
@@ -197,4 +197,4 @@ class CSMSVoz: UIViewController, URLSessionDelegate, URLSessionTaskDelegate, URL
         task.resume()
     }
 }
-    
+
