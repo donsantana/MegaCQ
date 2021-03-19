@@ -2,7 +2,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '12.0'
 use_frameworks!
 
-target "Conaitor" do
+target "MegaCQ" do
     pod 'Socket.IO-Client-Swift'
     pod 'Canvas'
     pod 'AFNetworking'
