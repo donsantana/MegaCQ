@@ -13,7 +13,7 @@ extension LoginController: UITextFieldDelegate{
   //MARK:- CONTROL DE TECLADO VIRTUAL
   //Funciones para mover los elementos para que no queden detrás del teclado
   func textFieldDidBeginEditing(_ textField: UITextField) {
-    textField.textColor = Customization.secundaryColor
+    textField.textColor = Customization.textColor
     textField.text?.removeAll()
     if textField.isEqual(claveText) || textField.isEqual(clave){
       animateViewMoving(true, moveValue: 80, view: self.view)
@@ -28,11 +28,11 @@ extension LoginController: UITextFieldDelegate{
           if textField.isEqual(confirmarClavText){
             textField.isSecureTextEntry = true
           }
-          textField.tintColor = Customization.secundaryColor
+          textField.tintColor = Customization.textColor
           animateViewMoving(true, moveValue: 200, view: self.view)
         }else{
           if textField.isEqual(self.telefonoText){
-            textField.textColor = Customization.secundaryColor
+            textField.textColor = Customization.textColor
             //textField.text = ""
             animateViewMoving(true, moveValue: 70, view: self.view)
           }
